@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>µessenger</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            :root {
+               --brand: PaleVioletRed;
+            }
+            .brand {
+                color: var(--brand);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container py-3">
+            <div class="row">
+                <div class="col-md-3 text-nowrap">
+                    <h1 class="m-0">
+                        ✒️
+                        Ambient Messenging
+                    </h1>
+                </div>
+                <div class="col-md-9 text-end">
+                    <p class="small text-muted d-none d-md-block">
+                        <small>A <strong>µicroscopic messaging system</strong>.
+                    </p>
+                </div>
+            </div>
+            <hr>
+
+            <div id="umessage-ui">
+                <h5 class="text-center">ink it there !</h5>
+                <form onsubmit="return false" autocomplete="off">
+                    <input name="recipient" type="text" class="form-control" placeholder="👋 Type your recipient name...">
+                    <input name="message" type="text" class="form-control" placeholder="📨 Type your message...">
+                    <button name="send-message" type="submit" tabindex="-1" class="btn btn-primary">Send ➤</button>
+                </form>
+            </div>
+
+            <footer class="mt-4 small opacity-25 text-end">
+                <a href="https://github.com/adriencater/ambient-messaging">© Ambient Messaging</a>
+            </footer>
+        </div>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+        <script>
+            const api_url = (window.location.href || 'http://localhost:9999').replace(/\/$/, '');
+            const ui = {
+                recipient: document.querySelector('input[name=recipient]'),
+                message: document.querySelector('input[name=message]'),
+                send_message: document.querySelector('button[name=send-message]')
+            }
+            ui.send_message.addEventListener('click', send_message);
+            ui.send_message.addEventListener('submit', send_message);
+            ui.message.addEventListener('keydown', (event) => {
+                if (event.keyCode === 9) { // Tab pressed
+                    event.preventDefault();
+                    ui.recipient.focus();
+                }
+            });
+            focus();
+
+            function send_message() {
+                const message = ui.message.value;
+                const recipient = ui.recipient.value;
+                if (!message || !recipient) {
+                    alert('💁 Please type in a recipient and a message.')
+                    focus();
+                    return;
+                }
+                console.log('Sending message', message, 'to', recipient)
+                ui.message.disabled = true;
+                ui.send_message.disabled = true;
+                return fetch(`${api_url}/say/${recipient}/${message}`, {
+                    method: 'GET'
+                })
+                .then(response => {
+                    if (response.ok) return response.json();
+                    else return response.text().then(text => { throw new Error(text) });
+                })
+                .then(reply => {
+                    console.info('Message sent:', reply);
+                    ui.message.value = '';
+                    alert(`👍 Your message was sent to ${reply.topic}\n\n📨 ${reply.message}`)
+                })
+                .catch(error => {
+                    console.error('Error sending message:', error);
+                    alert(`⚠️ MESSAGE NOT SENT:\n\n${error}`);
+                })
+                .finally(() => {
+                    ui.recipient.disabled = false;
+                    ui.message.disabled = false;
+                    ui.send_message.disabled = false;
+                })
+            }
+
+            function focus() {
+                if (!ui.message.value) ui.message.focus();
+                if (!ui.recipient.value) ui.recipient.focus();
+            }
+        </script>
+    </body>
+</html>

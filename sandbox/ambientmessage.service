@@ -1,0 +1,16 @@
+# Service definition for Systemd.
+
+[Unit]
+Description=Ambient Messaging
+After=network.target
+
+[Service]
+ExecStart=python3 -m ambientmessage.web
+WorkingDirectory=%h/ambient-messaging/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

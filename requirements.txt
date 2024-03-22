@@ -1,0 +1,4 @@
+inky
+font-fredoka-one
+flask
+paho-mqtt

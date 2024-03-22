@@ -1,0 +1,42 @@
+###############################
+- - - - - - - - - - - - - - - -
+2023-12-30
+
+https://learn.pimoroni.com/article/getting-started-with-inky-phat
+
+ssh cute@cute.local
+curl https://get.pimoroni.com/inky | bash
+sudo reboot now
+
+Resources for your Inky pHAT & wHAT were copied to
+/home/cute/Pimoroni/inky
+
+- - - - - - - - -
+
+ssh cute@cute.local
+cd /home/cute/Pimoroni/inky/examples
+python3 name-badge.py --type "auto" --colour "black" --name "Inigo Montoya"
+
+python3
+from inky.auto import auto
+inky_display = auto()
+inky_display.set_border(inky_display.WHITE)
+
+from PIL import Image, ImageFont, ImageDraw
+img = Image.new("P", (inky_display.WIDTH, inky_display.HEIGHT))
+draw = ImageDraw.Draw(img)
+
+from font_fredoka_one import FredokaOne
+font = ImageFont.truetype(FredokaOne, 26)
+
+message = "Tell me something \nI don’t know..."
+w, h = font.getsize(message)
+x = 10
+y = 10
+
+draw.text((x, y), message, inky_display.BLACK, font)
+inky_display.set_image(img)
+inky_display.show()
+
+
+###############################
