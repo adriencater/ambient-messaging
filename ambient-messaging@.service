@@ -1,0 +1,18 @@
+# Service definition for Systemd.
+
+[Unit]
+Description=Ambient Messaging Client
+After=network.target
+
+[Service]
+Environment="AM_CLIENT_NAME=%i"
+Environment="AM_MQTT_HOST=broker.hivemq.com"
+ExecStart=python3 -m ambientmessage.client
+WorkingDirectory=/opt/ambient-messaging/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

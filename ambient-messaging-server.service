@@ -1,12 +1,13 @@
 # Service definition for Systemd.
 
 [Unit]
-Description=Ambient Messaging
+Description=Ambient Messaging Server
 After=network.target
 
 [Service]
-ExecStart=python3 -m ambientmessage.web
-WorkingDirectory=%h/ambient-messaging/
+Environment="AM_MQTT_HOST=broker.hivemq.com"
+ExecStart=python3 -m ambientmessage.server
+WorkingDirectory=/opt/ambient-messaging/
 StandardOutput=inherit
 StandardError=inherit
 Restart=always

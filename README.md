@@ -1,7 +1,13 @@
 ambient-messaging
 =
 
+[![POC Demo](https://i.ytimg.com/vi/5wmYNxQg5ug/maxres2.jpg)](https://www.youtube.com/embed/5wmYNxQg5ug)
+
+
+Components
+-
 ![Architecture](doc/diagram-components.drawio.png)
+
 
 Installation on RPi
 -
@@ -11,6 +17,7 @@ git clone https://github.com/adriencater/ambient-messaging.git
 cd ambient-messaging
 pip3 install -r requirements.txt
 ```
+⚠ This POC has absolutely no security feature.
 <!-- 
 Then, run the client:
 ```sh
@@ -47,7 +54,7 @@ AM_MQTT_HOST=broker.hivemq.com python3 -m ambientmessage.server
 Next, you can setup your own federative server on teh internets !
 
 
-Components & Usage
+Usage (Real world)
 -
 
 #### Server
@@ -89,8 +96,19 @@ Components & Usage
 
 TODO
 -
+  - Use a MCU as an alternative to RPi Zero
   - Use MQTT Client directly on the browser and remove the need of an *AM Server* !
     <br>https://github.com/mqttjs/MQTT.js#browser (websocket only)
+
+  - Run client as a service of systemd
+    ```sh
+    sudo pip install --system -r requirements.txt
+    sudo systemctl link $PWD/ambient-messaging@.service
+    sudo systemctl enable ambient-messaging@yourname
+    sudo systemctl start ambient-messaging@yourname
+    sudo systemctl status ambient-messaging@yourname
+    journalctl -f -u ambient-messaging
+    ```
 
   - Prevent the Wifi of the RPi to go asleep:
     ```sh
