@@ -112,7 +112,7 @@ TODO
 
   - Prevent the Wifi of the RPi to go asleep:
     ```sh
-    sudo echo '
+    echo '
     Description=Disable wlan0 powersave
     After=network-online.target
     Wants=network-online.target
@@ -122,9 +122,21 @@ TODO
     ExecStart=/sbin/iw wlan0 set power_save off
 
     [Install]
-    WantedBy=multi-user.target' > /etc/systemd/system/wifi-always-on.service
+    WantedBy=multi-user.target' | sudo tee /etc/systemd/system/wifi-always-on.service
 
     sudo systemctl enable /etc/systemd/system/wifi-always-on.service
     sudo reboot
-    sudo iwconfig
+    ```
+    Then, run `iwconfig` to check that it shows `Power Management:off`:
+    ```
+    lo        no wireless extensions.
+
+    wlan0     IEEE 802.11  ESSID:"My Wifi SSID"
+              Mode:Managed  Frequency:2.437 GHz  Access Point: 44:44:44:44:44:44
+              Bit Rate=5.5 Mb/s   Tx-Power=31 dBm
+              Retry short limit:7   RTS thr:off   Fragment thr:off
+              Power Management:off
+              Link Quality=56/70  Signal level=-54 dBm
+              Rx invalid nwid:0  Rx invalid crypt:0  Rx invalid frag:0
+              Tx excessive retries:82  Invalid misc:0   Missed beacon:0
     ```
