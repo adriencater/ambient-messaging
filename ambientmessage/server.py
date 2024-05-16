@@ -21,7 +21,8 @@ def on_connect(client, userdata, flags, reason_code):
     print(f'MQTT Connected with result code {reason_code}, {flags}, {userdata}')
 def on_publish(client, userdata, mid):
     print('MQTT Data published: ', client, userdata, mid)
-mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, 'am-service')
+# mqttc = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1, 'am-service')
+mqttc = mqtt.Client('am-service')
 mqttc.username_pw_set(os.getenv('AM_MQTT_USER'), os.getenv('AM_MQTT_PASS'))
 mqttc.on_connect = on_connect
 mqttc.on_publish = on_publish
